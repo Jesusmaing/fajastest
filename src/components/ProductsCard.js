@@ -75,7 +75,7 @@ const ProductsCard = ({ product }) => {
         <div className="product_info">
           <h5 className="product_title">{product.name.substring(0, 15)}</h5>
           <div className="product_price">
-            <span className="price">${product.price}.00</span>
+            <span className="price">${product.price}</span>
           </div>
           <div className="add-to-cart">
             <a
