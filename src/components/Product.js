@@ -27,13 +27,24 @@ const Product = () => {
   }, [details.imageUrls]);
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      toast.error("Please select a size and color");
+    console.log(details);
+    if(details.colors && details.colors.length > 0 ){
+      // if first index staart with #
+      if(details.colors[0].startsWith('#')){
+
+        if (!selectedColor) {
+          toast.error("Please select a color");
+          return;
+        }
+      }
+    }
+    if (!selectedSize) {
+      toast.error("Please select a size");
       return;
     }
     dispatch(
       addToCart({
-        _id: details.sku,
+        _id: details.stripeProductID,
         name: details.name,
         imageUrls: details.imageUrls,
         price: details.price,

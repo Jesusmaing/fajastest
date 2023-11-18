@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 const ProductsCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const _id = product.name;
+  const _id = product.stripeProductID;
   const idString = (_id) => {
     return String(_id).toLowerCase().split(" ").join("");
   };
@@ -85,7 +85,7 @@ const ProductsCard = ({ product }) => {
 
                 dispatch(
                   addToCart({
-                    _id: product.sku,
+                    _id: product.stripeProductID,
                     size: product.size,
                     name: product.name,
                     imageUrls: product.imageUrls,

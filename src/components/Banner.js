@@ -12,7 +12,7 @@ const Banner = () => {
               Live For <span>Fashion</span>
             </h1>
             <h3>Save Up To 50%</h3>
-            <Link to="/shop" className="theme-btn-one bg-black btn_md">
+            <Link  className="theme-btn-one bg-black btn_md">
               Shop Now
             </Link>
           </div>
