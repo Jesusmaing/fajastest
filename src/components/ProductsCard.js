@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 const ProductsCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const _id = product.title;
+  const _id = product.name;
   const idString = (_id) => {
     return String(_id).toLowerCase().split(" ").join("");
   };
@@ -21,16 +21,13 @@ const ProductsCard = ({ product }) => {
     });
   };
   return (
-    <div className="col-lg-12 col-md-6 col-sm-6 col-12" onClick={handleDetails}>
+    <div className="col-lg-12 col-md-6 col-sm-6 col-12">
       <div className="product_box">
-        <div className="product_img">
-          <div
-            onClick={handleDetails}
-            className="w-full h-60 cursor-pointer overflow-hidden"
-          >
+        <div className="product_img" onClick={handleDetails}>
+          <div className="w-full h-60 cursor-pointer overflow-hidden">
             <img
-              className="w-full h-full object-contain group-hover:scale-110 duration-500 product_img"
-              src={product.image}
+              className="w-full h-full object-cover group-hover:scale-110 duration-500 product_img "
+              src={product.imageUrls[0]}
               alt="productImg"
               onClick={handleDetails}
             />
@@ -76,26 +73,29 @@ const ProductsCard = ({ product }) => {
           </div>
         </div>
         <div className="product_info">
-          <h5 className="product_title">{product.title.substring(0, 15)}</h5>
+          <h5 className="product_title">{product.name.substring(0, 15)}</h5>
           <div className="product_price">
             <span className="price">${product.price}.00</span>
           </div>
           <div className="add-to-cart">
             <a
-              href="#!"
               className="offcanvas-toggle  theme-btn-one bg-black btn_sm"
               onClick={() => {
-                toast.success(`${product.title} is added`);
+                toast.success(`${product.name} is added`);
 
                 dispatch(
                   addToCart({
-                    _id: product._id,
-                    title: product.title,
-                    image: product.image,
+                    _id: product.sku,
+                    size: product.size,
+                    name: product.name,
+                    imageUrls: product.imageUrls,
                     price: product.price,
                     quantity: 1,
                     description: product.description,
-                    stripeID: product.stripeID,
+                    stripePriceID: product.stripePriceID,
+                    stripeProductID: product.stripeProductID,
+                    sizeInventory: product.sizeInventory,
+                    colors: product.colors,
                   })
                 );
               }}

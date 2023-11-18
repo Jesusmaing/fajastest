@@ -9,15 +9,15 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD7767YSgKZfsKx9Bxb9PcRkhzdXJX7Qac",
-  authDomain: "ope-website-392721.firebaseapp.com",
-  projectId: "ope-website-392721",
-  storageBucket: "ope-website-392721.appspot.com",
-  messagingSenderId: "250736301284",
-  appId: "1:250736301284:web:f3efabe2d44390554108f1",
-  measurementId: "G-BGW81H2806"
+  apiKey: "AIzaSyCCOpfToba5Gqd7yrbA0BKAASEbtNsjedY",
+  authDomain: "coding-solved.firebaseapp.com",
+  databaseURL: "https://coding-solved-default-rtdb.firebaseio.com",
+  projectId: "coding-solved",
+  storageBucket: "coding-solved.appspot.com",
+  messagingSenderId: "59093349347",
+  appId: "1:59093349347:web:cbce226a4b62597cbe26d6",
+  measurementId: "G-NJ76H5JKFL"
 };
-
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 //initialize firestore
@@ -25,4 +25,4 @@ export const db = getFirestore(app);
 
 export const functions = getFunctions(app); // Export the functions object
 
-export const getStripeURL = httpsCallable(functions, "stripeCheckout");
+export const getStripeURL = httpsCallable(functions, "createCheckoutSessionOnCall");

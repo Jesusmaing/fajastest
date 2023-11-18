@@ -4,18 +4,21 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 
 
 export async function productsData() {
-  const products = await axios.get(
-    "https://fakestoreapiserver.reactbd.com/products"
-  );
   const productsData = [];
-  const productCollection = collection(db, 'products'); 
+  // store id bgYkQofK6TTQxaMuNNUo
+  // products are in stores/storeId/products
+  const productCollection = collection(db, 'stores/bgYkQofK6TTQxaMuNNUo/products');
   const productSnapshot = await getDocs(productCollection);
+
+  // const productCollection = collection(db, 'store'); 
+  // const productSnapshot = await getDocs(productCollection);
 
   productSnapshot.forEach(doc => { productsData.push(doc.data()) });
 
   console.group("products");
   console.log(productsData);
   console.groupEnd();
+    
 
   return productsData;
 }

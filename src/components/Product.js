@@ -7,43 +7,137 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Product = () => {
   const dispatch = useDispatch();
-  const [details, Details] = useState({});
-  let [baseQty, setBaseQty] = useState(1);
+  const [details, setDetails] = useState({});
+  const [baseQty, setBaseQty] = useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
   const location = useLocation();
+
   useEffect(() => {
-    Details(location.state.item);
+    setDetails(location.state.item);
   }, [location]);
 
+  // Estado para la imagen seleccionada
+  const [selectedImage, setSelectedImage] = useState("");
+
+  useEffect(() => {
+    if (details.imageUrls && details.imageUrls.length > 0) {
+      setSelectedImage(details.imageUrls[0]);
+    }
+  }, [details.imageUrls]);
+
+  const handleAddToCart = () => {
+    if (!selectedSize || !selectedColor) {
+      toast.error("Please select a size and color");
+      return;
+    }
+    dispatch(
+      addToCart({
+        _id: details.sku,
+        name: details.name,
+        imageUrls: details.imageUrls,
+        price: details.price,
+        quantity: baseQty,
+        size: selectedSize,
+        color: selectedColor,
+        description: details.description,
+        stripePriceID: details.stripePriceID,
+        stripeProductID: details.stripeProductID,
+
+      })
+    );
+    toast.success(`${details.name} is added`);
+  };
+
+  // Sección de tallas
+  const renderSizes = () => {
+    if (!details.sizeInventory) return null;
+    return Object.entries(details.sizeInventory).map(([size, qty]) => (
+      <button
+        key={size}
+        disabled={qty === 0}
+        onClick={() => setSelectedSize(size)}
+        className={`cursor-pointer p-2 m-1 ${
+          selectedSize === size ? "bg-black text-white" : "bg-gray-200"
+        } ${
+          qty === 0
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-black hover:text-white"
+        }`}
+      >
+        {size}
+      </button>
+    ));
+  };
+
+  // Sección de colores
+  const renderColors = () => {
+    if (!details.colors) return null;
+    return details.colors.map((color, index) => (
+      <div
+        key={index}
+        style={{
+          backgroundColor: color,
+          width: "25px",
+          height: "25px",
+          cursor: "pointer",
+          position: "relative",
+        }}
+        onClick={() => setSelectedColor(color)}
+      >
+        {selectedColor === color && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-4px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "15px",
+              height: "3px",
+              backgroundColor: "green",
+            }}
+          ></div>
+        )}
+      </div>
+    ));
+  };
+
   return (
-    <div>
-      <div className="max-w-screen-xl mx-auto my-10 flex gap-10">
-        <div className="w-2/5 relative">
+    <div className="max-w-screen-xl mx-auto my-10 px-4 md:px-0">
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="md:w-2/5 w-full">
           <img
-            className="w-full h-[550px] object-cover"
-            src={details.image}
+            className="w-full h-auto object-cover"
+            src={selectedImage}
             alt="productImg"
           />
-          <div className="absolute top-4 right-0">
-            {details.isNew && (
-              <p className="bg-black text-white font-semibold font-titleFont px-8 py-1">
-                Sale
-              </p>
-            )}
+          {/* Miniaturas de imágenes */}
+          <div className="flex gap-2 mt-2 overflow-x-auto">
+            {details.imageUrls &&
+              details.imageUrls.map((url, index) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`thumbnail-${index}`}
+                  className="w-24 h-24 object-cover cursor-pointer"
+                  onClick={() => setSelectedImage(url)}
+                />
+              ))}
           </div>
         </div>
-        <div className="w-3/5 flex flex-col justify-center gap-12">
+        <div className="md:w-3/5 w-full flex flex-col gap-6">
           <div>
             <h2 className="text-4xl font-semibold">{details.title}</h2>
             <div className="flex items-center gap-4 mt-3">
-              <p className="line-through font-base text-gray-500">
+              {/* <p className="line-through font-base text-gray-500">
                 ${details.oldPrice}
-              </p>
+              </p> */}
               <p className="text-2xl font-medium text-gray-900">
                 ${details.price}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <div className="flex text-base">
               <MdOutlineStar />
               <MdOutlineStar />
@@ -52,8 +146,27 @@ const Product = () => {
               <MdOutlineStar />
             </div>
             <p className="text-xs text-gray-500">(1 Customer review)</p>
+          </div> */}
+          <p
+            className="text-base text-gray-500 -mt-3"
+            style={{ whiteSpace: "pre-wrap" }}
+          >
+            {details.description}
+          </p>{" "}
+          {/* Sección de colores */}
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Available Colors</h3>
+            <div className="flex gap-2">
+              
+                    <div className="flex gap-2">{renderColors()}</div>
+                  
+            </div>
           </div>
-          <p className="text-base text-gray-500 -mt-3">{details.description}</p>
+          {/* Sección de tallas */}
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Sizes</h3>
+            <div className="flex flex-wrap">{renderSizes()}</div>
+          </div>
           <div className="flex gap-4">
             <div className="w-52 flex items-center justify-between text-gray-500 gap-4 border p-3">
               <p className="text-sm">Quantity</p>
@@ -75,24 +188,12 @@ const Product = () => {
                 </button>
               </div>
             </div>
-            <button
-              onClick={() =>
-                dispatch(
-                  addToCart({
-                    _id: details._id,
-                    title: details.title,
-                    image: details.image,
-                    price: details.price,
-                    quantity: baseQty,
-                    description: details.description,
-                    stripeID: details.stripeID
 
-                  })
-                ) & toast.success(`${details.title} is added`)
-              }
+            <button
+              onClick={handleAddToCart}
               className="bg-black text-white py-3 px-6 active:bg-gray-800"
             >
-              add to cart
+              Add to Cart
             </button>
           </div>
           <p className="text-base text-gray-500">

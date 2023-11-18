@@ -11,12 +11,14 @@ const Products = ({ products }) => {
         </h1>
         <span className="w-20 h-[3px] bg-black"></span>
         <p className="max-w-[700px] text-gray-600 text-justify">
-          Optical Parts and Equipment, your trusted store for all your optical needs.
-          We provide a wide range of high quality ophthalmic products designed for precision and reliability.
-          Our offerings include lenses, frames, optical instruments, and various ophthalmic equipment.
-          Commitment to customer satisfaction and offering top-notch products are at the heart of our service.
-          Explore our collection and find everything you need to provide excellent eye care services.
-
+          Fajas y Fajas, your go-to store for all your shapewear needs. We offer
+          a wide range of high-quality products designed for support and
+          comfort. Our selection includes slimming shapewear, body shapers,
+          post-surgical girdles, and sports waist trainers, as well as related
+          accessories. Commitment to customer satisfaction and offering
+          top-notch products are at the heart of our service. Explore our
+          collection and find everything you need for excellent body support and
+          shaping.
         </p>
       </div>
       {/* =================== Products Start here ================= */}
