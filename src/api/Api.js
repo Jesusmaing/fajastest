@@ -13,8 +13,13 @@ export async function productsData() {
   // const productCollection = collection(db, 'store'); 
   // const productSnapshot = await getDocs(productCollection);
 
-  productSnapshot.forEach(doc => { productsData.push(doc.data()) });
-
+  productSnapshot.forEach(doc => {
+    const data = doc.data();
+    // Incluir productos donde showInPage no es false (es decir, es true o no existe)
+    if (data.showInPage !== false) {
+      productsData.push(data);
+    }
+  });
   console.group("products");
   console.log(productsData);
   console.groupEnd();
