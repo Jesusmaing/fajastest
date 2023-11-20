@@ -81,26 +81,27 @@ const ProductsCard = ({ product }) => {
             <a
               className="offcanvas-toggle  theme-btn-one bg-black btn_sm"
               onClick={() => {
-                toast.success(`${product.name} is added`);
+                //toast.success(`${product.name} is added`);
 
-                dispatch(
-                  addToCart({
-                    _id: product.stripeProductID,
-                    size: product.size,
-                    name: product.name,
-                    imageUrls: product.imageUrls,
-                    price: product.price,
-                    quantity: 1,
-                    description: product.description,
-                    stripePriceID: product.stripePriceID,
-                    stripeProductID: product.stripeProductID,
-                    sizeInventory: product.sizeInventory,
-                    colors: product.colors,
-                  })
-                );
+                // dispatch(
+                //   addToCart({
+                //     _id: product.stripeProductID,
+                //     size: product.size,
+                //     name: product.name,
+                //     imageUrls: product.imageUrls,
+                //     price: product.price,
+                //     quantity: 1,
+                //     description: product.description,
+                //     stripePriceID: product.stripePriceID,
+                //     stripeProductID: product.stripeProductID,
+                //     sizeInventory: product.sizeInventory,
+                //     colors: product.colors,
+                //   })
+                // );
+                handleDetails();
               }}
             >
-              <i className="fa fa-cart-arrow-down"></i>Add To Cart
+              <i className="fa fa-cart-arrow-down"></i> PRODUCT DETAILS
             </a>
           </div>
         </div>

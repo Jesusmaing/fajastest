@@ -20,8 +20,8 @@ const PayButton = ({ cartItems }) => {
     try {
       const response = await getStripeURL({
         cartItems: context.productData,
-        successUrl: "http://localhost:3000/success",
-        cancelUrl: "http://localhost:3000/cancel",
+        successUrl: "https://fajasyfajasaz.com/success",
+        cancelUrl: "https://fajasyfajasaz.com/cancel",
         storeID: "bgYkQofK6TTQxaMuNNUo",
       });
 

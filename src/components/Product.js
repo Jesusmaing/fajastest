@@ -28,9 +28,9 @@ const Product = () => {
 
   const handleAddToCart = () => {
     console.log(details);
-    if(details.colors && details.colors.length > 0 ){
+    if (details.colors && details.colors.length > 0) {
       // if first index staart with #
-      if(details.colors[0].startsWith('#')){
+      if (details.colors[0].startsWith('#')) {
 
         if (!selectedColor) {
           toast.error("Please select a color");
@@ -59,32 +59,56 @@ const Product = () => {
     );
     toast.success(`${details.name} is added`);
   };
-
-  // Sección de tallas
-  const renderSizes = () => {
-    if (!details.sizeInventory) return null;
-    return Object.entries(details.sizeInventory).map(([size, qty]) => (
-      <button
-        key={size}
-        disabled={qty === 0}
-        onClick={() => setSelectedSize(size)}
-        className={`cursor-pointer p-2 m-1 ${
-          selectedSize === size ? "bg-black text-white" : "bg-gray-200"
-        } ${
-          qty === 0
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-black hover:text-white"
-        }`}
-      >
-        {size}
-      </button>
-    ));
+  // Función para obtener colores únicos
+  const uniqueColors = () => {
+    const colors = details.inventory.map(item => item.color);
+    return [...new Set(colors)];
   };
 
-  // Sección de colores
+  // Función para obtener tallas únicas
+  const uniqueSizes = () => {
+    const sizes = details.inventory.map(item => item.size);
+    return [...new Set(sizes)];
+  };
+
+  // Función para obtener tallas disponibles por color seleccionado
+  const sizesForColor = (color) => {
+    return details.inventory
+      .filter(item => item.color === color && item.quantity > 0)
+      .map(item => item.size);
+  };
+
+  const renderSizes = () => {
+    if (!details.inventory || !selectedColor) return null;
+
+    const availableSizes = sizesForColor(selectedColor);
+
+    // Check if there are available sizes
+    if (availableSizes.length === 0) {
+      return <div>No stock available in this color.</div>;
+    }
+
+    return availableSizes.map((size, index) => {
+      return (
+        <div
+          key={index}
+          className={`border rounded-full w-16 mr-2 h-8 flex items-center justify-center cursor-pointer ${selectedSize === size
+            ? "bg-black text-white"
+            : "text-gray-500 hover:bg-gray-200"
+            }`}
+          onClick={() => setSelectedSize(size)}
+        >
+          {size}
+        </div>
+      );
+    });
+  };
+
+
   const renderColors = () => {
-    if (!details.colors) return null;
-    return details.colors.map((color, index) => (
+    if (!details.inventory) return null;
+
+    return uniqueColors().map((color, index) => (
       <div
         key={index}
         style={{
@@ -113,6 +137,7 @@ const Product = () => {
     ));
   };
 
+
   return (
     <div className="max-w-screen-xl mx-auto my-10 px-4 md:px-0">
       <div className="flex flex-col md:flex-row gap-6">
@@ -138,7 +163,7 @@ const Product = () => {
         </div>
         <div className="md:w-3/5 w-full flex flex-col gap-6">
           <div>
-            <h2 className="text-4xl font-semibold">{details.title}</h2>
+            <h2 className="text-4xl font-semibold">{details.name}</h2>
             <div className="flex items-center gap-4 mt-3">
               {/* <p className="line-through font-base text-gray-500">
                 ${details.oldPrice}
@@ -168,9 +193,9 @@ const Product = () => {
           <div>
             <h3 className="text-xl font-semibold mb-2">Available Colors</h3>
             <div className="flex gap-2">
-              
-                    <div className="flex gap-2">{renderColors()}</div>
-                  
+
+              <div className="flex gap-2">{renderColors()}</div>
+
             </div>
           </div>
           {/* Sección de tallas */}
